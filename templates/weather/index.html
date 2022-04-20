@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<!-- http://openweathermap.org/img/wn/{{data.icon}}.png -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/homePage.css' %}" />
+    <title>Simple Weather Application</title>
+</head>
+
+<body>
+    <div class="container-sm d-flex flex-column justify-content-center align-items-center ">
+        <h1 class="mt-5 display-1" id="heading">Weather Forcast</h1>
+        <form method="post" action="{% url 'home' %}" class='my-5 '>
+            {%csrf_token%}
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Search City" name="city" required onkeydown=removeError()>
+                </div>
+                <div class="col">
+                    <input type="submit" class="btn btn-warning" value="Search">
+                </div>
+            </div>
+        </form>
+        {% if data %}
+        <div class="card text-center w-50 mt-4">
+            <div class="card-header h1" style="color: #B4161B;">
+                {{data.city}} ({{data.country}})
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{data.celciustemperature}}&#8451;/{{data.kelvintemperature}}&#8457;</h5>
+                <img src="http://openweathermap.org/img/wn/{{data.icon}}.png" class="card-img-top" alt="image not found"
+                    style="width: 8rem;">
+                <p class="card-text">{{data.weather}}</p>
+            </div>
+            <div class="card-footer text-muted">
+                <p style="color: #120E43;">Humidity: {{data.humidity}} // Pressure: {{data.pressure}}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% if error %}
+    <div class="alert alert-warning w-50 container-sm" role="alert" id="error">
+        {{error}}
+    </div>
+    {% endif %}
+    <script src="{% static 'bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+
+</html>
